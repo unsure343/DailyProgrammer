@@ -1,19 +1,18 @@
 public class LetterGrid {
     protected int columns;
     protected int rows;
-    protected String message;
-    public char [][] letterGrid;
-    public LetterGrid(int inCols, int inRows, String inMessage){
+    protected RotationDirection direction;
+    protected String inputMessage;
+    protected char [][] letterGrid;
+    
+
+    public LetterGrid(int inCols, int inRows, String inMessage, RotationDirection inDir){
         letterGrid = new char [inCols] [inRows];
         columns = inCols;
         rows = inRows;
-        message = ConvertStingFormat(inMessage);
+        inputMessage = ConvertStingFormat(inMessage);
+        direction = inDir;
         BuildLetterGrid();
-    }
-
-    private String ConvertStingFormat(String inMessage) {
-        String cleanString = inMessage.replaceAll("[^a-zA-Z]", "");
-        return cleanString.toUpperCase();
     }
 
     public void BuildLetterGrid() {
@@ -26,13 +25,13 @@ public class LetterGrid {
 
     private void InsertLetter(int column, int row) {
         char letter = 'X';
-        if(column + row*columns < message.length()) {
-            letter = message.charAt(column + row*columns);
+        if(column + row*columns < inputMessage.length()) {
+            letter = inputMessage.charAt(column + row*columns);
         }
         letterGrid[column][row] = Character.toUpperCase(letter);
     }
 
-    public void PrintLetterGrid() {
+    public String PrintAndReturnLetterGrid() {
         String outputString = "";
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -45,5 +44,27 @@ public class LetterGrid {
             }
         }
         System.out.println(outputString);
+        return outputString;
     }
+    public String GetColumnString() {
+        return String.valueOf(columns);
+    }
+
+    public String GetRowString() {
+        return String.valueOf(rows);
+    }
+
+    public String GetDirectionString() {
+        if (direction == RotationDirection.CLOCKWISE) {
+            return "clockwise";
+        }
+        return "counterclockwise";
+    }
+
+    private String ConvertStingFormat(String inMessage) {
+        String cleanString = inMessage.replaceAll("[^a-zA-Z]", "");
+        return cleanString.toUpperCase();
+    }
+
+
 }
