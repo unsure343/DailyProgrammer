@@ -3,4 +3,5 @@ public enum Side {
     RIGHT,
     BOTTOM,
     LEFT,
+    INVALID,
 }

@@ -1,17 +1,15 @@
 public class LetterGrid {
     protected int columns;
     protected int rows;
-    protected RotationDirection direction;
     protected String inputMessage;
-    protected char [][] letterGrid;
-    
+    protected char[][] letterGrid;
 
-    public LetterGrid(int inCols, int inRows, String inMessage, RotationDirection inDir){
-        letterGrid = new char [inCols] [inRows];
+
+    public LetterGrid(int inCols, int inRows, String inMessage) {
+        letterGrid = new char[inCols][inRows];
         columns = inCols;
         rows = inRows;
         inputMessage = ConvertStingFormat(inMessage);
-        direction = inDir;
         BuildLetterGrid();
     }
 
@@ -23,13 +21,24 @@ public class LetterGrid {
         }
     }
 
-    private void InsertLetter(int column, int row) {
-        char letter = 'X';
-        if(column + row*columns < inputMessage.length()) {
-            letter = inputMessage.charAt(column + row*columns);
+    public String Encrypt(RotationDirection direction) {
+
+            String encryptedMessage = "";
+            int currCol = columns-1;
+            int currRow = 0;
+            Side side = (direction == RotationDirection.CLOCKWISE ? Side.RIGHT : Side.TOP);
+            while (encryptedMessage.length() < rows*columns) {
+                encryptedMessage += encryptSide();
+                side = GetNextSide(side, direction);
+
         }
-        letterGrid[column][row] = Character.toUpperCase(letter);
+        return encryptedMessage;
     }
+
+    private String encryptSide() {
+        return "";
+    }
+
 
     public String PrintAndReturnLetterGrid() {
         String outputString = "";
@@ -46,6 +55,7 @@ public class LetterGrid {
         System.out.println(outputString);
         return outputString;
     }
+
     public String GetColumnString() {
         return String.valueOf(columns);
     }
@@ -54,11 +64,26 @@ public class LetterGrid {
         return String.valueOf(rows);
     }
 
-    public String GetDirectionString() {
-        if (direction == RotationDirection.CLOCKWISE) {
-            return "clockwise";
+    private Side GetNextSide(Side currSide, RotationDirection dir) {
+            switch (currSide) {
+                case RIGHT:
+                    return (dir == RotationDirection.CLOCKWISE? Side.BOTTOM : Side.TOP);
+                case BOTTOM:
+                    return (dir == RotationDirection.CLOCKWISE? Side.LEFT : Side.RIGHT);
+                case LEFT:
+                    return (dir == RotationDirection.CLOCKWISE? Side.TOP : Side.BOTTOM);
+                case TOP:
+                    return (dir == RotationDirection.CLOCKWISE? Side.RIGHT : Side.LEFT);
+            }
+        return Side.INVALID;
+    }
+
+    private void InsertLetter(int column, int row) {
+        char letter = 'X';
+        if(column + row*columns < inputMessage.length()) {
+            letter = inputMessage.charAt(column + row*columns);
         }
-        return "counterclockwise";
+        letterGrid[column][row] = Character.toUpperCase(letter);
     }
 
     private String ConvertStingFormat(String inMessage) {
